@@ -1,0 +1,16 @@
+{
+  "symptom_id": "abdominal_pain",
+  "symptom_name_uz": "Qorin og'rig'i",
+  "follow_up_questions": [
+    {"id": "ap_location", "question_uz": "Og'riq qorinning qaysi qismida?", "type": "multi_select", "options": [{"value": "right_lower", "label_uz": "O'ng pastki qismda"}, {"value": "left_lower", "label_uz": "Chap pastki qismda"}, {"value": "upper", "label_uz": "Yuqori qismda/Oshqozon atrofida"}, {"value": "diffuse", "label_uz": "Butun qorin bo'ylab"}], "required": true},
+    {"id": "ap_onset", "question_uz": "Og'riq qachon boshlandi?", "type": "duration_picker", "required": true},
+    {"id": "ap_character", "question_uz": "Og'riq xarakteri qanday?", "type": "single_select", "options": [{"value": "sharp", "label_uz": "Sanchib og'riydigan"}, {"value": "dull", "label_uz": "Simillab og'riydigan"}, {"value": "cramping", "label_uz": "Buralib og'riydigan"}], "required": true},
+    {"id": "ap_nausea", "question_uz": "Ko'ngil aynishi yoki qayt qilish bormi?", "type": "yes_no", "required": true},
+    {"id": "ap_diarrhea", "question_uz": "Ich ketishi (diareya) bormi?", "type": "yes_no", "required": true},
+    {"id": "ap_constipation", "question_uz": "Qabziyat (ich qotishi) bormi?", "type": "yes_no", "required": true},
+    {"id": "ap_fever", "question_uz": "Isitma bormi?", "type": "yes_no", "required": true, "triggers_symptom": "fever"},
+    {"id": "ap_blood_stool", "question_uz": "Axlatda qon bormi?", "type": "yes_no", "required": true, "red_flag_if": "yes"},
+    {"id": "ap_last_meal", "question_uz": "Oxirgi marta qachon ovqatlandingiz?", "type": "text", "required": false},
+    {"id": "ap_pregnancy", "question_uz": "Homiladorlik ehtimoli bormi? (Ayollar uchun)", "type": "yes_no", "required": false}
+  ]
+}

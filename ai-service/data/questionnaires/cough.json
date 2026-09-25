@@ -1,0 +1,15 @@
+{
+  "symptom_id": "cough",
+  "symptom_name_uz": "Yo'tal",
+  "follow_up_questions": [
+    {"id": "cough_duration", "question_uz": "Yo'tal qachondan beri davom etmoqda?", "type": "duration_picker", "required": true},
+    {"id": "cough_type", "question_uz": "Yo'tal quruqmi yoki balg'amlimi?", "type": "single_select", "options": [{"value": "dry", "label_uz": "Quruq"}, {"value": "wet", "label_uz": "Balg'amli"}], "required": true},
+    {"id": "cough_sputum_color", "question_uz": "Balg'amning rangi qanday?", "type": "single_select", "options": [{"value": "clear", "label_uz": "Tiniq"}, {"value": "yellow_green", "label_uz": "Sariq/Yashil"}, {"value": "white", "label_uz": "Oq"}], "required": false},
+    {"id": "cough_hemoptysis", "question_uz": "Balg'amda qon bormi?", "type": "yes_no", "required": true, "red_flag_if": "yes"},
+    {"id": "cough_fever", "question_uz": "Isitma bormi?", "type": "yes_no", "required": true, "triggers_symptom": "fever"},
+    {"id": "cough_dyspnea", "question_uz": "Nafas qisishi kuzatilyaptimi?", "type": "yes_no", "required": true, "triggers_symptom": "dyspnea"},
+    {"id": "cough_chest_pain", "question_uz": "Yo'talganda ko'krakda og'riq bo'ladimi?", "type": "yes_no", "required": true},
+    {"id": "cough_weight_loss", "question_uz": "So'nggi oylarda sezilarli vazn yo'qotish kuzatildimi?", "type": "yes_no", "required": true},
+    {"id": "cough_tb_contact", "question_uz": "Sil kasalligi bilan og'riganlar bilan muloqotda bo'lganmisiz?", "type": "yes_no", "required": true}
+  ]
+}

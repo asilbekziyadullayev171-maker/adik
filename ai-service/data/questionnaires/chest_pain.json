@@ -1,0 +1,23 @@
+{
+  "symptom_id": "chest_pain",
+  "symptom_name_uz": "Ko'krak og'rig'i",
+  "follow_up_questions": [
+    {"id": "cp_onset", "question_uz": "Og'riq qachondan beri?", "type": "duration_picker", "required": true},
+    {"id": "cp_duration", "question_uz": "Har safar qancha davom etadi?", "type": "duration_picker", "required": true},
+    {"id": "cp_location", "question_uz": "Og'riq qayerda joylashgan?", "type": "multi_select", "options": [{"value": "center", "label_uz": "Ko'krak o'rtasida"}, {"value": "left", "label_uz": "Chap tomonda"}, {"value": "right", "label_uz": "O'ng tomonda"}, {"value": "upper", "label_uz": "Yuqori qismda"}], "required": true},
+    {"id": "cp_radiation", "question_uz": "Chap qo'lga, jag'ga yoki yelkaga tarqaladimi?", "type": "yes_no", "required": true, "red_flag_if": "yes"},
+    {"id": "cp_dyspnea", "question_uz": "Nafas qisishi bormi?", "type": "yes_no", "required": true, "triggers_symptom": "dyspnea"},
+    {"id": "cp_syncope", "question_uz": "Hushdan ketish yoki bosh aylanishi bo'lganmi?", "type": "yes_no", "required": true, "red_flag_if": "yes"},
+    {"id": "cp_diaphoresis", "question_uz": "Sovuq terlash bormi?", "type": "yes_no", "required": true, "red_flag_if": "yes"},
+    {"id": "cp_exertion", "question_uz": "Jismoniy harakatda kuchayadi?", "type": "yes_no", "required": false},
+    {"id": "cp_cardiac_history", "question_uz": "Oldin yurak kasalligi tashxisi bo'lganmi?", "type": "yes_no", "required": true}
+  ],
+  "conditional_questions": [
+    {
+      "condition": {"field": "cp_radiation", "operator": "equals", "value": "yes"},
+      "then_ask": [
+        {"id": "cp_radiation_location", "question_uz": "Og'riq qayerga tarqaladi?", "type": "multi_select", "options": [{"value": "left_arm", "label_uz": "Chap qo'l"}, {"value": "jaw", "label_uz": "Jag'"}, {"value": "shoulder", "label_uz": "Yelka"}, {"value": "back", "label_uz": "Orqa"}]}
+      ]
+    }
+  ]
+}

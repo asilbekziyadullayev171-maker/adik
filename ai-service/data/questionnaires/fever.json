@@ -1,0 +1,16 @@
+{
+  "symptom_id": "fever",
+  "symptom_name_uz": "Isitma",
+  "follow_up_questions": [
+    {"id": "fever_duration", "question_uz": "Isitma qachondan beri davom etmoqda?", "type": "duration_picker", "required": true},
+    {"id": "fever_max_temp", "question_uz": "Eng yuqori harorat necha bo'ldi?", "type": "number", "min": 37, "max": 42, "required": true},
+    {"id": "fever_chills", "question_uz": "Qaltirash bormi?", "type": "yes_no", "required": true},
+    {"id": "fever_sweating", "question_uz": "Ko'p terlash kuzatildimi?", "type": "yes_no", "required": true},
+    {"id": "fever_cough", "question_uz": "Yo'tal bormi?", "type": "yes_no", "required": true, "triggers_symptom": "cough"},
+    {"id": "fever_urinary", "question_uz": "Siyish paytida achishish yoki og'riq bormi?", "type": "yes_no", "required": true},
+    {"id": "fever_rash", "question_uz": "Tanada toshmalar bormi?", "type": "yes_no", "required": true},
+    {"id": "fever_travel", "question_uz": "Yaqin 1 oy ichida chet elga yoki boshqa hududga safar qildingizmi?", "type": "yes_no", "required": true},
+    {"id": "fever_surgery", "question_uz": "Yaqinda jarrohlik amaliyoti o'tkazildimi?", "type": "yes_no", "required": true},
+    {"id": "fever_medication", "question_uz": "Isitma tushiruvchi dori ichdingizmi?", "type": "yes_no", "required": true}
+  ]
+}

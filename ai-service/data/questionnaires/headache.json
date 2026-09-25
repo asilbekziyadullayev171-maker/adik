@@ -1,0 +1,15 @@
+{
+  "symptom_id": "headache",
+  "symptom_name_uz": "Bosh og'rig'i",
+  "follow_up_questions": [
+    {"id": "ha_onset", "question_uz": "Og'riq qanday boshlandi?", "type": "single_select", "options": [{"value": "sudden", "label_uz": "To'satdan va keskin"}, {"value": "gradual", "label_uz": "Sekin-asta"}], "required": true, "red_flag_if": "sudden"},
+    {"id": "ha_severity", "question_uz": "Og'riq kuchini 1 dan 10 gacha baholang", "type": "number", "min": 1, "max": 10, "required": true},
+    {"id": "ha_location", "question_uz": "Og'riq qayerda?", "type": "multi_select", "options": [{"value": "frontal", "label_uz": "Peshonada"}, {"value": "occipital", "label_uz": "Ensa qismida"}, {"value": "temporal", "label_uz": "Chakka qismida"}, {"value": "unilateral", "label_uz": "Bir tomonda"}], "required": true},
+    {"id": "ha_neck_stiffness", "question_uz": "Bo'yiningiz qotib, egishda qiyinchilik bormi?", "type": "yes_no", "required": true, "red_flag_if": "yes"},
+    {"id": "ha_fever", "question_uz": "Isitma bormi?", "type": "yes_no", "required": true, "triggers_symptom": "fever"},
+    {"id": "ha_vision", "question_uz": "Ko'rish qobiliyatida o'zgarishlar bormi?", "type": "yes_no", "required": true},
+    {"id": "ha_nausea", "question_uz": "Ko'ngil aynishi yoki qayt qilish bormi?", "type": "yes_no", "required": true},
+    {"id": "ha_hypertension_history", "question_uz": "Oldin qon bosimi oshishi tashxisi qo'yilganmi?", "type": "yes_no", "required": true},
+    {"id": "ha_trauma", "question_uz": "Yaqin orada boshdan jarohat olganmisiz?", "type": "yes_no", "required": true}
+  ]
+}

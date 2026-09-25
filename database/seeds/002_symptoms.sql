@@ -1,0 +1,22 @@
+INSERT INTO symptoms (code, name_uz, name_ru, name_en, category) VALUES
+('chest_pain', 'Ko''krak qafasida og''riq', 'Боль в груди', 'Chest pain', 'cardiovascular'),
+('cough', 'Yo''tal', 'Кашель', 'Cough', 'respiratory'),
+('fever', 'Isitma', 'Лихорадка', 'Fever', 'general'),
+('headache', 'Bosh og''rig''i', 'Головная боль', 'Headache', 'neurological'),
+('abdominal_pain', 'Qorinda og''riq', 'Боль в животе', 'Abdominal pain', 'gastrointestinal'),
+('back_pain', 'Bel og''rig''i', 'Боль в спине', 'Back pain', 'musculoskeletal'),
+('dyspnea', 'Hansirash', 'Одышка', 'Dyspnea', 'respiratory'),
+('dizziness', 'Bosh aylanishi', 'Головокружение', 'Dizziness', 'neurological'),
+('fatigue', 'Charchoq', 'Усталость', 'Fatigue', 'general'),
+('nausea', 'Ko''ngil aynishi', 'Тошнота', 'Nausea', 'gastrointestinal'),
+('vomiting', 'Qayt qilish', 'Рвота', 'Vomiting', 'gastrointestinal'),
+('diarrhea', 'Ich ketishi', 'Диарея', 'Diarrhea', 'gastrointestinal'),
+('edema', 'Shish', 'Отек', 'Edema', 'general'),
+('palpitations', 'Yurak o''ynashi', 'Сердцебиение', 'Palpitations', 'cardiovascular'),
+('syncope', 'Hushdan ketish', 'Обморок', 'Syncope', 'neurological'),
+('hemoptysis', 'Qon tupurish', 'Кровохарканье', 'Hemoptysis', 'respiratory'),
+('neck_stiffness', 'Bo''yin qotishi', 'Ригидность затылочных мышц', 'Neck stiffness', 'neurological'),
+('weight_loss', 'Vazn yo''qotish', 'Потеря веса', 'Weight loss', 'general'),
+('joint_pain', 'Bo''g''im og''rig''i', 'Боль в суставах', 'Joint pain', 'musculoskeletal'),
+('rash', 'Toshma', 'Сыпь', 'Rash', 'dermatological')
+ON CONFLICT (code) DO NOTHING;

@@ -1,0 +1,15 @@
+{
+  "symptom_id": "dyspnea",
+  "symptom_name_uz": "Nafas qisishi",
+  "follow_up_questions": [
+    {"id": "dyspnea_onset", "question_uz": "Nafas qisishi qachon boshlandi?", "type": "duration_picker", "required": true},
+    {"id": "dyspnea_context", "question_uz": "Nafas qisishi qachon kuzatiladi?", "type": "single_select", "options": [{"value": "rest", "label_uz": "Tinch holatda"}, {"value": "exertion", "label_uz": "Harakat qilganda"}], "required": true},
+    {"id": "dyspnea_orthopnea", "question_uz": "Yotgan holatda nafas qisishi kuchayadimi?", "type": "yes_no", "required": true},
+    {"id": "dyspnea_nocturnal", "question_uz": "Kechasi nafas qisishidan uyg'onib ketasizmi?", "type": "yes_no", "required": true},
+    {"id": "dyspnea_cough", "question_uz": "Yo'tal bormi?", "type": "yes_no", "required": true, "triggers_symptom": "cough"},
+    {"id": "dyspnea_wheezing", "question_uz": "Nafas olayotganda xirillash eshitiladimi?", "type": "yes_no", "required": true},
+    {"id": "dyspnea_chest_pain", "question_uz": "Ko'krak og'rig'i bormi?", "type": "yes_no", "required": true, "triggers_symptom": "chest_pain"},
+    {"id": "dyspnea_edema", "question_uz": "Oyoqlarda shish bormi?", "type": "yes_no", "required": true},
+    {"id": "dyspnea_cardiac_history", "question_uz": "Yurak kasalligi bormi?", "type": "yes_no", "required": true}
+  ]
+}

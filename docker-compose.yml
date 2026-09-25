@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: qishloqmed_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-qishloqmed}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-qishloqmed_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/000_schema.sql
+      - ./database/seeds/001_roles.sql:/docker-entrypoint-initdb.d/001_roles.sql
+      - ./database/seeds/002_symptoms.sql:/docker-entrypoint-initdb.d/002_symptoms.sql
+      - ./database/seeds/003_districts_villages.sql:/docker-entrypoint-initdb.d/003_districts_villages.sql
+    networks:
+      - qishloqmed-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: qishloqmed_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - qishloqmed-network
+    restart: unless-stopped
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    image: qishloqmed-backend:latest
+    container_name: qishloqmed_backend
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - db
+      - redis
+    networks:
+      - qishloqmed-network
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: qishloqmed_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+    networks:
+      - qishloqmed-network
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+
+networks:
+  qishloqmed-network:
+    driver: bridge
