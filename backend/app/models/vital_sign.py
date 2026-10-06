@@ -1,8 +1,13 @@
+from sqlalchemy import DateTime
+TIMESTAMP = DateTime(timezone=True)
+TIMESTAMPTZ = DateTime(timezone=True)
+from sqlalchemy import DateTime
+TIMESTAMPTZ = DateTime(timezone=True)
 import uuid
 from datetime import datetime
 from sqlalchemy import String, Integer, SmallInteger, ForeignKey, func, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMPTZ
+from sqlalchemy.dialects.postgresql import UUID
 from app.database import Base
 
 class VitalSign(Base):
@@ -18,7 +23,7 @@ class VitalSign(Base):
     respiratory_rate: Mapped[int | None] = mapped_column(SmallInteger)
     weight: Mapped[float | None] = mapped_column(Numeric(5, 1))
     height: Mapped[float | None] = mapped_column(Numeric(4, 1))
-    measured_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now())
+    measured_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
     measurement_method: Mapped[str] = mapped_column(String(20), default="manual")
 
     visit: Mapped["Visit"] = relationship("Visit", back_populates="vital_signs")

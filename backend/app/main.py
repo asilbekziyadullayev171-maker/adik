@@ -23,14 +23,21 @@ def create_app() -> FastAPI:
 
     app.include_router(api_router, prefix="/api/v1")
 
+    # Static files for medical photos and attachments
+    import os
+    from fastapi.staticfiles import StaticFiles
+    uploads_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../uploads"))
+    os.makedirs(uploads_dir, exist_ok=True)
+    app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
+
     @app.get("/health", tags=["health"])
     async def health_check():
         return {"status": "healthy"}
 
     @app.on_event("startup")
     async def init_db():
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
+        # Database schema is already provisioned on the VPS
+        pass
 
     return app
 

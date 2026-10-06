@@ -11,16 +11,23 @@ from app.core.exceptions import UnauthorizedException, ForbiddenException, NotFo
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/login")
 
+import uuid
+
 async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)) -> User:
     try:
         payload = decode_token(token)
-        phone: str = payload.get("sub")
-        if phone is None:
+        sub: str = payload.get("sub")
+        if sub is None:
             raise UnauthorizedException(detail="Could not validate credentials")
     except ValueError:
         raise UnauthorizedException(detail="Could not validate credentials")
     
-    stmt = select(User).options(selectinload(User.roles)).where(User.phone == phone)
+    try:
+        user_uuid = uuid.UUID(sub)
+        stmt = select(User).options(selectinload(User.roles)).where(User.id == user_uuid)
+    except (ValueError, AttributeError):
+        stmt = select(User).options(selectinload(User.roles)).where(User.phone == sub)
+        
     result = await db.execute(stmt)
     user = result.scalars().first()
     

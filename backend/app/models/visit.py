@@ -1,8 +1,13 @@
+from sqlalchemy import DateTime
+TIMESTAMP = DateTime(timezone=True)
+TIMESTAMPTZ = DateTime(timezone=True)
+from sqlalchemy import DateTime
+TIMESTAMPTZ = DateTime(timezone=True)
 import uuid
 from datetime import datetime
 from sqlalchemy import String, Boolean, Integer, SmallInteger, ForeignKey, func, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMPTZ
+from sqlalchemy.dialects.postgresql import UUID
 from app.database import Base
 
 class Visit(Base):
@@ -12,7 +17,7 @@ class Visit(Base):
     patient_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("patients.id"), nullable=False, index=True)
     nurse_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
     clinic_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("clinics.id"))
-    visit_date: Mapped[datetime] = mapped_column(TIMESTAMPTZ, nullable=False, server_default=func.now(), index=True)
+    visit_date: Mapped[datetime] = mapped_column(TIMESTAMP, nullable=False, server_default=func.now(), index=True)
     chief_complaint: Mapped[str] = mapped_column(Text, nullable=False)
     status: Mapped[str] = mapped_column(String(30), nullable=False, default="in_progress", index=True)
     risk_level: Mapped[str | None] = mapped_column(String(15), index=True)
@@ -20,8 +25,8 @@ class Visit(Base):
     notes: Mapped[str | None] = mapped_column(Text)
     is_synced: Mapped[bool] = mapped_column(Boolean, default=False)
     local_id: Mapped[str | None] = mapped_column(String(50))
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now(), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
     patient: Mapped["Patient"] = relationship("Patient", back_populates="visits")
     nurse: Mapped["User"] = relationship("User", back_populates="nurse_visits", foreign_keys=[nurse_id])
@@ -33,6 +38,19 @@ class Visit(Base):
     red_flag_alerts: Mapped[list["RedFlagAlert"]] = relationship("RedFlagAlert", back_populates="visit")
     lab_results: Mapped[list["LabResult"]] = relationship("LabResult", back_populates="visit")
     anamnesis_responses: Mapped[list["AnamnesisResponse"]] = relationship("AnamnesisResponse", back_populates="visit")
+    attachments: Mapped[list["VisitAttachment"]] = relationship("VisitAttachment", back_populates="visit", cascade="all, delete-orphan")
+
+    @property
+    def vitals(self):
+        return self.vital_signs
+
+    @property
+    def red_flags(self):
+        return self.red_flag_alerts
+
+    @property
+    def anamnesis(self):
+        return self.anamnesis_responses
 
 
 class Symptom(Base):

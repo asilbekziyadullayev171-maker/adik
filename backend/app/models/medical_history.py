@@ -1,8 +1,13 @@
+from sqlalchemy import DateTime
+TIMESTAMP = DateTime(timezone=True)
+TIMESTAMPTZ = DateTime(timezone=True)
+from sqlalchemy import DateTime
+TIMESTAMPTZ = DateTime(timezone=True)
 import uuid
 from datetime import date, datetime
 from sqlalchemy import String, Boolean, Integer, ForeignKey, func, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMPTZ
+from sqlalchemy.dialects.postgresql import UUID
 from app.database import Base
 
 class MedicalHistory(Base):
@@ -15,7 +20,7 @@ class MedicalHistory(Base):
     onset_date: Mapped[date | None] = mapped_column()
     is_current: Mapped[bool] = mapped_column(Boolean, default=True)
     recorded_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"))
-    recorded_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now())
+    recorded_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
 
     patient: Mapped["Patient"] = relationship("Patient", back_populates="medical_histories")
     recorder: Mapped["User"] = relationship("User", foreign_keys=[recorded_by])
@@ -62,7 +67,7 @@ class LabResult(Base):
     result_unit: Mapped[str | None] = mapped_column(String(50))
     reference_range: Mapped[str | None] = mapped_column(String(100))
     is_abnormal: Mapped[bool | None] = mapped_column(Boolean)
-    performed_at: Mapped[datetime | None] = mapped_column(TIMESTAMPTZ)
+    performed_at: Mapped[datetime | None] = mapped_column(TIMESTAMP)
     recorded_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"))
 
     visit: Mapped["Visit"] = relationship("Visit", back_populates="lab_results")

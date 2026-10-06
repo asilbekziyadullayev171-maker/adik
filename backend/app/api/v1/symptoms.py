@@ -7,11 +7,21 @@ from app.models import User
 
 router = APIRouter()
 
+import json
+import os
+from sqlalchemy import select
+from app.models import Symptom
+
 @router.get("", response_model=List[SymptomResponse])
 async def list_symptoms(db: AsyncSession = Depends(deps.get_db), current_user: User = Depends(deps.get_current_active_user)):
-    # MVP: Mock returning symptoms, actual implementation queries DB
-    return []
+    stmt = select(Symptom).order_by(Symptom.id)
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 @router.get("/{code}/questionnaire")
 async def get_symptom_questionnaire(code: str, db: AsyncSession = Depends(deps.get_db), current_user: User = Depends(deps.get_current_active_user)):
-    return []
+    q_path = os.path.join(r"d:\shifonuri\ai-service\data\questionnaires", f"{code}.json")
+    if os.path.exists(q_path):
+        with open(q_path, "r", encoding="utf-8") as fp:
+            return json.load(fp)
+    return {"symptom_code": code, "questions": []}

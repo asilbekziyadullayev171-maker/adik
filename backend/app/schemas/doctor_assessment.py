@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from uuid import UUID
-from typing import Optional, List
+from typing import Optional, List, Any, Dict
 from datetime import date, datetime
 
 class DoctorAssessmentCreate(BaseModel):

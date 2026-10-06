@@ -69,3 +69,12 @@ yarn-error.log
 yarn-debug.log
 .pnp/
 .pnp.js
+dist/
+*.zip
+QishloqMed-Hamshira-YANGI-*.apk
+shifonuri-doctor-web/
+
+# Android build
+nurse-app/android/.gradle/
+nurse-app/android/build/
+nurse-app/android/app/build/

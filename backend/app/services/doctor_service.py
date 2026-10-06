@@ -1,8 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from app.models import DoctorAssessment, Diagnosis, Referral, FollowUp, Prescription
 import uuid
 
 async def create_assessment(db: AsyncSession, visit_id: uuid.UUID, doctor_id: uuid.UUID, data) -> DoctorAssessment:
+    # Check if an assessment already exists for this visit
+    res = await db.execute(select(DoctorAssessment).where(DoctorAssessment.visit_id == visit_id))
+    existing = res.scalars().first()
+    if existing:
+        for key, val in data.model_dump(exclude_unset=True).items():
+            setattr(existing, key, val)
+        existing.doctor_id = doctor_id
+        await db.commit()
+        await db.refresh(existing)
+        return existing
+
     assessment = DoctorAssessment(visit_id=visit_id, doctor_id=doctor_id, **data.model_dump())
     db.add(assessment)
     await db.commit()

@@ -3,14 +3,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Any
 import uuid
 from app.api import deps
-from app.schemas.visit import VisitResponse
+from app.schemas.visit import VisitResponse, VisitDetailResponse
 from app.schemas.doctor_assessment import DoctorAssessmentCreate, DoctorAssessmentResponse, DiagnosisCreate, ReferralCreate, FollowUpCreate, PrescriptionCreate, MessageToNurse
 from app.services import doctor_service, visit_service
 from app.models import User
 
 router = APIRouter()
 
-@router.get("/queue", response_model=List[VisitResponse])
+@router.get("/queue", response_model=List[VisitDetailResponse])
 async def get_queue(db: AsyncSession = Depends(deps.get_db), current_user: User = Depends(deps.get_current_active_user)):
     return await visit_service.get_doctor_queue(db, current_user.id, {})
 

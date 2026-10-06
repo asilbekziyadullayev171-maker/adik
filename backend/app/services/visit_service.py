@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.models import Visit, VisitSymptom, VitalSign, LabResult, AnamnesisResponse
+from sqlalchemy.orm import selectinload
+from app.models import Visit, VisitSymptom, VitalSign, LabResult, AnamnesisResponse, Patient
 from app.schemas.visit import VisitCreate
 import uuid
 
@@ -19,17 +20,51 @@ async def create_visit(db: AsyncSession, data: VisitCreate, nurse_id: uuid.UUID,
     return visit
 
 async def get_visit(db: AsyncSession, visit_id: uuid.UUID) -> Visit | None:
-    query = select(Visit).where(Visit.id == visit_id)
+    query = (
+        select(Visit)
+        .options(
+            selectinload(Visit.patient).selectinload(Patient.village),
+            selectinload(Visit.symptoms).selectinload(VisitSymptom.symptom),
+            selectinload(Visit.vital_signs),
+            selectinload(Visit.ai_assessment),
+            selectinload(Visit.doctor_assessment),
+            selectinload(Visit.red_flag_alerts),
+            selectinload(Visit.lab_results),
+            selectinload(Visit.anamnesis_responses),
+            selectinload(Visit.attachments),
+        )
+        .where(Visit.id == visit_id)
+    )
     result = await db.execute(query)
-    return result.scalars().first()
+    v = result.scalars().first()
+    if v and v.patient:
+        v.patient_first_name = v.patient.first_name
+        v.patient_last_name = v.patient.last_name
+    return v
 
 async def get_visits(db: AsyncSession, filters: dict, pagination: dict) -> list[Visit]:
-    query = select(Visit)
     page = pagination.get("page", 1)
     size = pagination.get("size", 20)
-    query = query.offset((page - 1) * size).limit(size)
+    query = (
+        select(Visit)
+        .options(
+            selectinload(Visit.patient),
+            selectinload(Visit.symptoms),
+            selectinload(Visit.vital_signs),
+            selectinload(Visit.attachments),
+        )
+        .order_by(Visit.created_at.desc())
+        .offset((page - 1) * size)
+        .limit(size)
+    )
     result = await db.execute(query)
-    return list(result.scalars().all())
+    visits = list(result.scalars().all())
+    for v in visits:
+        if v.patient:
+            v.patient_first_name = v.patient.first_name
+            v.patient_last_name = v.patient.last_name
+        v.symptom_count = len(v.symptoms) if v.symptoms else 0
+    return visits
 
 async def update_visit_status(db: AsyncSession, visit_id: uuid.UUID, status: str) -> Visit | None:
     visit = await get_visit(db, visit_id)
@@ -87,6 +122,25 @@ async def submit_to_doctor(db: AsyncSession, visit_id: uuid.UUID) -> Visit | Non
     return await update_visit_status(db, visit_id, "pending_doctor")
 
 async def get_doctor_queue(db: AsyncSession, doctor_id: uuid.UUID, filters: dict) -> list[Visit]:
-    query = select(Visit).where(Visit.status == "pending_doctor").order_by(Visit.urgency.desc())
+    status_filter = filters.get("status")
+    query = (
+        select(Visit)
+        .options(
+            selectinload(Visit.patient),
+            selectinload(Visit.symptoms),
+            selectinload(Visit.vital_signs),
+            selectinload(Visit.attachments),
+            selectinload(Visit.ai_assessment),
+        )
+    )
+    if status_filter:
+        query = query.where(Visit.status == status_filter)
+    query = query.order_by(Visit.urgency.desc(), Visit.created_at.desc())
     result = await db.execute(query)
-    return list(result.scalars().all())
+    visits = list(result.scalars().all())
+    for v in visits:
+        if v.patient:
+            v.patient_first_name = v.patient.first_name
+            v.patient_last_name = v.patient.last_name
+        v.symptom_count = len(v.symptoms) if v.symptoms else 0
+    return visits

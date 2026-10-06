@@ -1,8 +1,13 @@
+from sqlalchemy import DateTime
+TIMESTAMP = DateTime(timezone=True)
+TIMESTAMPTZ = DateTime(timezone=True)
+from sqlalchemy import DateTime
+TIMESTAMPTZ = DateTime(timezone=True)
 import uuid
 from datetime import datetime
 from sqlalchemy import String, Boolean, SmallInteger, ForeignKey, func, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMPTZ
+from sqlalchemy.dialects.postgresql import UUID
 from app.database import Base
 
 class UserRole(Base):
@@ -10,7 +15,7 @@ class UserRole(Base):
 
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), primary_key=True)
     role_id: Mapped[int] = mapped_column(SmallInteger, ForeignKey("roles.id"), primary_key=True)
-    assigned_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now())
+    assigned_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
 
 class Role(Base):
     __tablename__ = "roles"
@@ -26,13 +31,14 @@ class User(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     phone: Mapped[str] = mapped_column(String(20), unique=True, nullable=False, index=True)
+    email: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     first_name: Mapped[str] = mapped_column(String(100), nullable=False)
     last_name: Mapped[str] = mapped_column(String(100), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
-    last_login: Mapped[datetime | None] = mapped_column(TIMESTAMPTZ)
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now(), onupdate=func.now())
+    last_login: Mapped[datetime | None] = mapped_column(TIMESTAMP)
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
     roles: Mapped[list[Role]] = relationship("Role", secondary="user_roles", back_populates="users")
     

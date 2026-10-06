@@ -1,8 +1,13 @@
+from sqlalchemy import DateTime
+TIMESTAMP = DateTime(timezone=True)
+TIMESTAMPTZ = DateTime(timezone=True)
+from sqlalchemy import DateTime
+TIMESTAMPTZ = DateTime(timezone=True)
 import uuid
 from datetime import date, datetime
 from sqlalchemy import String, Integer, ForeignKey, func, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMPTZ
+from sqlalchemy.dialects.postgresql import UUID
 from app.database import Base
 
 class DoctorAssessment(Base):
@@ -16,8 +21,8 @@ class DoctorAssessment(Base):
     ai_disagreement_reason: Mapped[str | None] = mapped_column(Text)
     treatment_plan: Mapped[str | None] = mapped_column(Text)
     recommendations: Mapped[str | None] = mapped_column(Text)
-    reviewed_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now())
-    completed_at: Mapped[datetime | None] = mapped_column(TIMESTAMPTZ)
+    reviewed_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
+    completed_at: Mapped[datetime | None] = mapped_column(TIMESTAMP)
 
     visit: Mapped["Visit"] = relationship("Visit", back_populates="doctor_assessment")
     doctor: Mapped["User"] = relationship("User", back_populates="doctor_assessments", foreign_keys=[doctor_id])

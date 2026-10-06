@@ -1,8 +1,13 @@
+from sqlalchemy import DateTime
+TIMESTAMP = DateTime(timezone=True)
+TIMESTAMPTZ = DateTime(timezone=True)
+from sqlalchemy import DateTime
+TIMESTAMPTZ = DateTime(timezone=True)
 import uuid
 from datetime import datetime
 from sqlalchemy import String, Integer, ForeignKey, func, Text, Numeric, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMPTZ, JSONB
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from app.database import Base
 
 class AIAssessment(Base):
@@ -20,7 +25,7 @@ class AIAssessment(Base):
     model_version: Mapped[str] = mapped_column(String(20), nullable=False)
     input_features: Mapped[dict | list | None] = mapped_column(JSONB)
     inference_time_ms: Mapped[int | None] = mapped_column(Integer)
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
 
     visit: Mapped["Visit"] = relationship("Visit", back_populates="ai_assessment")
 
@@ -35,8 +40,8 @@ class RedFlagAlert(Base):
     triggered_values: Mapped[dict | list] = mapped_column(JSONB, nullable=False)
     action_taken: Mapped[str | None] = mapped_column(Text)
     acknowledged_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"))
-    acknowledged_at: Mapped[datetime | None] = mapped_column(TIMESTAMPTZ)
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now())
+    acknowledged_at: Mapped[datetime | None] = mapped_column(TIMESTAMP)
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
 
     visit: Mapped["Visit"] = relationship("Visit", back_populates="red_flag_alerts")
     acknowledger: Mapped["User"] = relationship("User", foreign_keys=[acknowledged_by])

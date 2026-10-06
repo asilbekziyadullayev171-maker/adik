@@ -1,8 +1,13 @@
+from sqlalchemy import DateTime
+TIMESTAMP = DateTime(timezone=True)
+TIMESTAMPTZ = DateTime(timezone=True)
+from sqlalchemy import DateTime
+TIMESTAMPTZ = DateTime(timezone=True)
 import uuid
 from datetime import date, datetime
 from sqlalchemy import String, Boolean, Integer, ForeignKey, func, Text, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMPTZ
+from sqlalchemy.dialects.postgresql import UUID
 from app.database import Base
 
 class District(Base):
@@ -78,8 +83,8 @@ class Patient(Base):
     national_id: Mapped[str | None] = mapped_column(String(20), unique=True)
     blood_type: Mapped[str | None] = mapped_column(String(5))
     created_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"))
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(TIMESTAMPTZ, server_default=func.now(), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
     village: Mapped[Village | None] = relationship("Village", back_populates="patients")
     creator: Mapped["User"] = relationship("User", back_populates="created_patients", foreign_keys=[created_by])

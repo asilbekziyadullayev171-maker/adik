@@ -4,8 +4,10 @@ from app.models import User
 from app.core.security import verify_password, get_password_hash, create_access_token, create_refresh_token
 from app.core.exceptions import UnauthorizedException
 
-async def authenticate_user(db: AsyncSession, phone: str, password: str) -> User | None:
-    result = await db.execute(select(User).where(User.phone == phone))
+from sqlalchemy import or_
+
+async def authenticate_user(db: AsyncSession, identifier: str, password: str) -> User | None:
+    result = await db.execute(select(User).where(or_(User.phone == identifier, User.email == identifier)))
     user = result.scalars().first()
     if not user:
         return None

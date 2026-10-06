@@ -15,8 +15,8 @@ class VisitUpdate(BaseModel):
 class VisitResponse(BaseModel):
     id: UUID
     patient_id: UUID
-    nurse_id: UUID
-    clinic_id: int
+    nurse_id: Optional[UUID] = None
+    clinic_id: Optional[int] = None
     visit_date: datetime
     chief_complaint: str
     status: str
@@ -39,6 +39,7 @@ class VisitDetailResponse(VisitResponse):
     red_flags: List[Any] = []
     lab_results: List[Any] = []
     anamnesis: List[Any] = []
+    attachments: List[Any] = []
 
     model_config = ConfigDict(from_attributes=True)
 
