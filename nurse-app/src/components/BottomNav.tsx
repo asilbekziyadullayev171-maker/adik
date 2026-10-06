@@ -22,7 +22,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   pendingReviewsCount,
 }) => {
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] w-full max-w-full overflow-hidden">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 pt-2 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] shadow-[0_-10px_40px_rgba(0,0,0,0.05)] w-full max-w-full overflow-hidden">
       <div className="flex items-center justify-around max-w-md mx-auto">
         {/* Tab 1: Visits */}
         <button

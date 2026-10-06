@@ -125,7 +125,7 @@ export function App() {
   const reviewedCount = reviewedVisits.length;
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-900 flex flex-col font-sans pb-20 md:pb-0">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-900 flex flex-col font-sans pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] md:pb-0">
       {/* Top Header */}
       <Header
         onOpenProfile={() => setIsProfileOpen(true)}
